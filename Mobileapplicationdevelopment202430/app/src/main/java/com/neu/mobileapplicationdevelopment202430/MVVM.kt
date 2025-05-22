@@ -1,48 +1,62 @@
 package com.neu.mobileapplicationdevelopment202430
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.*
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-class MVVM : Fragment() {
+class MVVM : ViewModel() {
+    private val r = MutableLiveData<String>()
+    val result: LiveData<String> = r
 
-    private val viewModel: MVVMViewModel by viewModels()
+    fun convert(value: String?, from: String, to: String) {
+        val massUnits = setOf("Kg", "Pound")
+        val volumeUnits = setOf("Litre", "Gallon", "Cups")
+        val lengthUnits = setOf("Yard", "Meter", "Feet")
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_m_v_v_m, container, false)
-
-        val spinner1: Spinner = view.findViewById(R.id.spinner5)
-        val spinner2: Spinner = view.findViewById(R.id.spinner6)
-
-        val edit: EditText = view.findViewById(R.id.editTextNumber2)
-        val resultText: TextView = view.findViewById(R.id.editTextText2)
-
-        val convertBtn: Button = view.findViewById(R.id.button7)
-
-        val units = listOf("Kg", "Pound", "Litre", "Gallon", "Yard", "Meter", "Feet", "Cups")
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, units)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner1.adapter = adapter
-        spinner2.adapter = adapter
-
-        convertBtn.setOnClickListener {
-            val input = edit.text.toString()
-            val from = spinner1.selectedItem.toString()
-            val to = spinner2.selectedItem.toString()
-            viewModel.convert(input, from, to)
+        fun isCompatible(from: String, to: String): Boolean {
+            return (from in massUnits && to in massUnits) ||
+                    (from in volumeUnits && to in volumeUnits) ||
+                    (from in lengthUnits && to in lengthUnits)
         }
 
-        viewModel.result.observe(viewLifecycleOwner) {
-            resultText.text = it
+        val convertingMap = mapOf<Pair<String, String>, Double>(
+            "Kg" to "Pound" to 2.20462,
+            "Pound" to "Kg" to 1 / 2.20462,
+            "Litre" to "Gallon" to 0.264172,
+            "Gallon" to "Litre" to 1 / 0.264172,
+            "Litre" to "Cups" to 4.22675,
+            "Cups" to "Litre" to 1 / 4.22675,
+            "Gallon" to "Cups" to 16.0,
+            "Cups" to "Gallon" to 1 / 16.0,
+            "Yard" to "Meter" to 0.9144,
+            "Meter" to "Yard" to 1 / 0.9144,
+            "Feet" to "Meter" to 0.3048,
+            "Meter" to "Feet" to 1 / 0.3048,
+            "Yard" to "Feet" to 3.0,
+            "Feet" to "Yard" to 1 / 3.0
+        )
+
+        val num = value?.toDouble()
+        if (num == null) {
+            r.value = "Invalid input"
+            return
         }
 
-        return view
+        if (from == to) {
+            r.value = num.toString()
+            return
+        }
+
+        if (!isCompatible(from, to)) {
+            r.value = "Not correct units"
+            return
+        }
+
+        val factor = convertingMap[from to to]
+        if (factor != null) {
+            r.value = (num * factor).toString()
+        } else {
+            r.value = "Not allowed to convert"
+        }
     }
 }

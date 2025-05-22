@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_m_v_p" />
     <fragment
         android:id="@+id/MVVM"
-        android:name="com.neu.mobileapplicationdevelopment202430.MVVM"
+        android:name="com.neu.mobileapplicationdevelopment202430.MVVMFragment"
         android:label="fragment_m_v_v_m"
         tools:layout="@layout/fragment_m_v_v_m" />
     <fragment
