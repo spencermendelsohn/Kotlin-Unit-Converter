@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Converter app</string>
+    <string name="test_MVP">MVP</string>
+    <string name="enter_value">Enter 1st number</string>
+    <string name="mvp">MVP</string>
+    <string name="mvvm">MVVM</string>
+    <string name="convert">Convert</string>
+</resources>

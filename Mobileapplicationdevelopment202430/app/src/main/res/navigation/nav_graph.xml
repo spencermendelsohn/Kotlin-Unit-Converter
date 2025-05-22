@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/start2">
+
+    <fragment
+        android:id="@+id/MVP"
+        android:name="com.neu.mobileapplicationdevelopment202430.MVP"
+        android:label="fragment_m_v_p"
+        tools:layout="@layout/fragment_m_v_p" />
+    <fragment
+        android:id="@+id/MVVM"
+        android:name="com.neu.mobileapplicationdevelopment202430.MVVM"
+        android:label="fragment_m_v_v_m"
+        tools:layout="@layout/fragment_m_v_v_m" />
+    <fragment
+        android:id="@+id/start2"
+        android:name="com.neu.mobileapplicationdevelopment202430.Start"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" >
+        <action
+            android:id="@+id/action_start2_to_MVP"
+            app:destination="@id/MVP" />
+        <action
+            android:id="@+id/action_start2_to_MVVM"
+            app:destination="@id/MVVM" />
+    </fragment>
+</navigation>
